@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import express from "express";
+import express, { application } from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -26,6 +26,10 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 let lastSyncTime = new Date(); // Initialize the last sync time
+
+app.get("/", (req, res) => {
+    res.json({message: "app is running 👍"})
+})
 
 // backend status
 app.get("/api/status", async (req, res) => {
