@@ -18,11 +18,18 @@ mongoose
 const app = express();
 
 const corsOptions = {
-    origin: process.env.REACT_URI,
+    origin: process.env.REACT_URI || "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"],
     optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
+
+// Add logging to debug
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path} - Origin: ${req.get('origin')}`);
+    next();
+});
+
 app.use(express.json());
 
 let lastSyncTime = new Date(); // Initialize the last sync time
@@ -71,7 +78,8 @@ app.get("/api/passwords", async (req, res) => {
         const users = await Users.find();
         res.json(users);
     } catch (err) {
-        res.status(400).json({ error: "Unable to get passwords" });
+        console.error("Error fetching passwords:", err);
+        res.status(500).json({ error: "Unable to get passwords", details: err.message });
     }
 });
 
