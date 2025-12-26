@@ -27,7 +27,7 @@ app.use(express.json());
 
 let lastSyncTime = new Date(); // Initialize the last sync time
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     res.json({message: "app is running 👍"})
 })
 
